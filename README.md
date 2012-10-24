@@ -48,7 +48,7 @@ This Testing.html document is what i used to test the library with. Simply run i
 various tests. Be sure to include your api key in the query string part of the url.
 
 Example:
-> Testing.html?key=<apikey>
+> Testing.html?key=< apikey >
 
 This is not a comprehensive test page but tests basic functionality. More tests can be made to test Security
 concerns and other aspects of the API such as error handling.
