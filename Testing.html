@@ -11,8 +11,33 @@
 	<body>
   		<div id="qunit"></div>
 		<script type='text/javascript'>
+			function getKey(){
+				var qstring = location.search.substr(1),
+					items = qstring.split("&");
+				
+				console.log(qstring);
+				console.log(items);
+				
+				for(var n=0;n<items.length;n++){
+					var item = items[n].split("="),
+						name = item[0],
+						value = item[1];
+					
+					if(name === "key")
+						return value;
+				}
+				
+				return undefined;
+			}
 			$(function(){
-				DarkSky.api({key: "d6669abe2c0f429e8557d381f63bc451"});
+				var apikey = getKey();
+				
+				console.log("key => ", apikey);
+				
+				if(apikey === undefined)
+					return;
+				
+				DarkSky.api({key: apikey});
 				
 	  			module("DarkSky");
 	  			var time = Date.now();
@@ -21,16 +46,16 @@
 		  			
 		  			var url = DarkSky.api("createURL", "forecast");
 		  			
-		  			equal(url, "https://api.darkskyapp.com/v1/forecast/d6669abe2c0f429e8557d381f63bc451/34.66,-86.94", "Forecast URL Test");
+		  			equal(url, "https://api.darkskyapp.com/v1/forecast/"+apikey+"/34.66,-86.94", "Forecast URL Test");
 		  			
 		  			url = DarkSky.api("createURL", "brief_forecast");
-		  			equal(url, "https://api.darkskyapp.com/v1/brief_forecast/d6669abe2c0f429e8557d381f63bc451/34.66,-86.94", "Brief Forecast URL Test");
+		  			equal(url, "https://api.darkskyapp.com/v1/brief_forecast/"+apikey+"/34.66,-86.94", "Brief Forecast URL Test");
 		  			
 		  			url = DarkSky.api("createURL", "precipitation", [ {lat: 34.66, long: -86.94, time: (time+0)}, {lat: 34.66, long: -86.94, time: ((time)+1*60*60*1000)} ]);
-		  			equal(url, "https://api.darkskyapp.com/v1/precipitation/d6669abe2c0f429e8557d381f63bc451/34.66,-86.94,"+(time+0)+";34.66,-86.94,"+((time)+1*60*60*1000), "Precipitation URL Test");
+		  			equal(url, "https://api.darkskyapp.com/v1/precipitation/"+apikey+"/34.66,-86.94,"+(time+0)+";34.66,-86.94,"+((time)+1*60*60*1000), "Precipitation URL Test");
 		  			
 		  			url = DarkSky.api("createURL", "interesting", []);
-		  			equal(url, "https://api.darkskyapp.com/v1/interesting/d6669abe2c0f429e8557d381f63bc451/", "Interesting URL Test");
+		  			equal(url, "https://api.darkskyapp.com/v1/interesting/"+apikey+"/", "Interesting URL Test");
 		  		});
 		  		
 		  		asyncTest( "Forecast Get Request", function() {
