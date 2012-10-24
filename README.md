@@ -37,10 +37,18 @@ Initialization Options
 * key  - _string_ 
   * Your API key for the DarkSky REST Interface
 * autoLocation - _bool_
-  * In the future, when autoLocation is turned on the library will attempt to autodetect the location using the Html5 GeoLocation interface.
+  * In the future, when autoLocation is turned on the library will attempt to autodetect the location using 
+  * the Html5 GeoLocation interface.
 * location - _array / object_
   * An array or object containing a single or multiple locations and/or times to request information for.
 
 Testing.html
 ============
-This Testing.html document is what i used to test the library with. Simply run it in the browser to run the various tests. This is not a comprehensive test page but tests basic functionality.
+This Testing.html document is what i used to test the library with. Simply run it in the browser to run the 
+various tests. Be sure to include your api key in the query string part of the url.
+
+Example:
+> Testing.html?key=<apikey>
+
+This is not a comprehensive test page but tests basic functionality. More tests can be made to test Security
+concerns and other aspects of the API such as error handling.
