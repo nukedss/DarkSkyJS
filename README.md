@@ -5,8 +5,8 @@ Dark Sky Javascript Library
 
 Dependancies
 ============
-* jQuery library - [jQuery](http://www.jquery.com)
-* QUnit library - [QUnit](http://www.qunitjs.com)
+* [jQuery](http://www.jquery.com)
+* [QUnit](http://www.qunitjs.com)
 
 Basic Usage
 ===========
@@ -23,7 +23,9 @@ DarkSky.api("brief_forecast", function(resp){
 DarkSky.api("interesting", function(resp){
 	console.log("forecast => ", resp);
 });
-DarkSky.api("precipitation", [ {lat: 34.66, long: -86.94, time: (time+0)}, {lat: 34.66, long: -86.94, time: ((time)+1*60*60*1000)} ], function(resp){
+DarkSky.api("precipitation", [ 	{lat: 34.66, long: -86.94, time: (time+0)}, 
+								{lat: 34.66, long: -86.94, time: ((time)+1*60*60*1000)} ], 
+							 function(resp){
 	console.log("precipitation => ", resp);
 }, function(resp){
 	console.error("precipitation error =>", resp);
@@ -32,11 +34,11 @@ DarkSky.api("precipitation", [ {lat: 34.66, long: -86.94, time: (time+0)}, {lat:
 
 Initialization Options
 ======================
-* _string_ key
+* key  - _string_ 
   * Your API key for the DarkSky REST Interface
-* _bool_ autoLocation
+* autoLocation - _bool_
   * In the future, when autoLocation is turned on the library will attempt to autodetect the location using the Html5 GeoLocation interface.
-* _array / object_ location
+* location - _array / object_
   * An array or object containing a single or multiple locations and/or times to request information for.
 
 Testing.html
