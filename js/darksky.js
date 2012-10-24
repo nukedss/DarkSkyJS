@@ -39,12 +39,20 @@
 									autoLocation: false,
 									//default location is Pryor Field, Decatur Alabama
 									//can contain multiple 
-									location: [ {lat: 34.66, long: -86.94} ],
+									location: {lat: 34.66, long: -86.94},
 									key: "d41d8cd98f00b204e9800998ecf8427e"
 								}, options);
 			
 			w.DarkSky.api("options", options);
-			w.DarkSky.api("storage", {});
+			
+			if(w.DarkSky.api("storage", "init") === undefined)
+				w.DarkSky.api("storage", { init: true });
+			
+			if(options.autoLocation && w.DarkSky.api("storage", "location") === undefined && navigator.geolocation){
+				navigator.geolocation.getCurrentPosition(function(position){
+					w.DarkSky.api("storage", "location", {lat: position.coords.latitude, long: position.coords.longitude});
+				});
+			}
 			
 			return w.DarkSky;
 		},
@@ -79,7 +87,7 @@
 					},
 					storage: function(module, id, values){
 						if(module === null || module === undefined)
-							module = "app";
+							module = "darksky";
 						
 						if(localStorage){
 							var app_data = (localStorage[module] === undefined) ? {} : JSON.parse(localStorage[module]);
@@ -119,10 +127,10 @@
 					},
 					session: function(module, id, values){
 						if(module === null || module === undefined)
-							module = "dark_sky";
+							module = "darksky";
 						
 						if(sessionStorage){
-							var app_data = (localStorage[sessionStorage] === undefined) ? {} : JSON.parse(sessionStorage[module]);
+							var app_data = (sessionStorage[module] === undefined) ? {} : JSON.parse(sessionStorage[module]);
 							
 							if( typeof id === 'object' ) {
 								
@@ -170,8 +178,6 @@
 								data = [data];
 						}
 
-						console.log(data);
-						
 						var position = "";
 						
 						for(var n=0;n<data.length;n++){
@@ -188,15 +194,32 @@
 						return "https://api.darkskyapp.com/v1/"+module+"/"+key+"/"+position;
 					},
 					forecast: function(data, fn, fail){
-						if(typeof data === "function")
+						if(typeof data === "function"){
+							/*location = pub.options("location");
+							
+							//if data is just an object and not an array .. make into an array
+							if(location.length === undefined)
+								location = [location];
+							else if(location.length >= 1)
+								location = [ location[0] ];*/
+
 							return priv.get(pub.createURL("forecast"), data, fn);
+						}
 						
 						return priv.get(pub.createURL("forecast", data), fn, fail);
 					},
 					brief_forecast: function(data, fn, fail){
-						if(typeof data === "function")
+						if(typeof data === "function"){
+							/*location = pub.options("location");
+							
+							//if data is just an object and not an array .. make into an array
+							if(location.length === undefined)
+								location = [location];
+							else if(location.length >= 1)
+								location = [ location[0] ];*/
+									
 							return priv.get(pub.createURL("brief_forecast"), data, fn);
-						
+						}
 						return priv.get(pub.createURL("brief_forecast", data), fn, fail);
 					},
 					precipitation: function(data, fn, fail){
@@ -215,17 +238,17 @@
 			 * 
 			 */
 			if ( pub[method] ) {
-				  return pub[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
+				return pub[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
 			} else if ( ui[method] ) {
-				  return ui[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
+				return ui[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
 			} else if ( w.DarkSky[method] ) {
-			  return w.DarkSky[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
+				return w.DarkSky[method].apply( this, Array.prototype.slice.call( arguments, 1 ));
 			} else if ( typeof method === 'object' || ! method ) {
-			  return w.DarkSky.init.apply( this, arguments );
+				return w.DarkSky.init.apply( this, arguments );
 			} else if ( w.DarkSky.options[method] ) {
-			  return w.DarkSky.options[method];
+				return w.DarkSky.options[method];
 			} else {
-			  $.error( 'Method ' +  method + ' does not exist in DarkSky' );
+				$.error( 'Method ' +  method + ' does not exist in DarkSky' );
 			}    
 		}
 	};
